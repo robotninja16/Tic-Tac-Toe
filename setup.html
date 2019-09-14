@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<!--Tic-Tac-Toe version 2.1, last updated 9/14/2019, 12:40 PM-->
 <html>
 
 <head>
@@ -7,9 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.sound.js"></script>
     <script src="src/p5.clickable.js"></script>
     <script src="src/Data.js"></script>
-    <div id='rect'></div>
+    <div id='__rect'></div>
     <style type='text/css'>
-        #rect {
+        #__rect {
             width: 100%;
             height: 100%;
             stroke: none;
@@ -56,7 +58,7 @@
         */
         let board,
             turn, player, buttons, data,
-            xImg, oImg, linesImg, tieImg, titleImages,
+            xImg, oImg, linesImg, tieImg, titleImages, borderImg, 
             mode, format, difficulty,
             music, musicShouldPlay, colorA, colorB, textA, textB;
         musicShouldPlay = false;
@@ -78,14 +80,15 @@
             linesImg = loadImage('src/assets/Lines&Border.png');
             tieImg = loadImage('src/assets/tie.png');
             titleImages = [loadImage('src/assets/TicTacToeA.png'), loadImage('src/assets/TicTacToeB.png'), loadImage('src/assets/TicTacToeC.png')];
+            borderImg = loadImage('src/assets/Border.png')
         }
         let canvas;
         let colors = ['#FF0000', '#0000FF', '#FFFF00', '#FF00FF', '#FF00FF', '#FFFFFF', '#A56927', '#F5F5F5', '#FFDD1A', '#C5C5C5', '#DB1515', '#FFE215']
         function setup() {
-            console.log("Ignore these warnings (at least for this website), music doesn't start until you push the button on the other side of the screen.");
-            console.log("Credit: P5, Martin del Rio for the looks and the in-canvas buttons. See     https://p5js.org for the p5 stuff.");
-            console.log("Thank you, and have a good time playing Tic-Tac-Toe! :)");
-            console.log("Oh, and I got the music from Scratch (https://scratch.mit.edu)");
+            console.log("Ignore these warnings (at least for this website), music doesn't start until you push the button on the other side of the screen."
+            + "\nCredit: P5, Martin del Rio for the looks and the in-canvas buttons. See \nhttps://p5js.org for the p5 stuff."
+            + "\nThank you, and have a good time playing Tic-Tac-Toe! :)"
+            + "\nOh, and I got the music from Scratch (https://scratch.mit.edu)");
             colorA = createColorPicker('#FF0000'); colorA.position(220, 700);
             colorB = createColorPicker('#0000FF'); colorB.position(360, 700);
             textA = createDiv("X");
@@ -125,9 +128,11 @@
             FX.style('color', 'white'); FX.style('font-family', 'Sans-Serif'); FX.style('font-size', '30px'); FX.style('cursor', 'cell');
             textA.style('color', '#000000'); textA.position((windowWidth - 174) / 2 + 110, 650); textA.style('font-size', '30px'); textA.style('font-family', 'Arial'); textA.style('color', 'white'); textA.style('cursor', 'cell');
             textB.style('color', '#000000'); textB.position((104 + windowWidth) / 2 + 107, 650); textB.style('font-size', '30px'); textB.style('font-family', 'Arial'); textB.style('color', 'white'); textB.style('cursor', 'cell');
-            background(Math.sin(frameCount / 5) * 20 + 40);
-            if (!FX.checked())
+            if (!FX.checked()) 
                 background(0);
+            else 
+                background(Math.sin(frameCount / 5) * 20 + 40);
+            image(borderImg, 0, 0, 450, 450);
             if (musicShouldPlay)
                 music.play();
             else
@@ -147,17 +152,6 @@
                         ellipse((board[i][0] + 5) * 1.5, (board[i][1] + 5) * 1.5, 135);
                     }
                 }
-                for (var y = 0; y < 300; y += 100) {
-                    for (var x = 0; x < 300; x += 100) {
-                        let console_;
-                        if (space(x, y) == null)
-                            console_ = '  ';
-                        else
-                            console_ = space(x, y);
-                        if (x < 200) { console_ = console_ + '|' }
-                        console.log(console_);
-                    }
-                }
                 image(linesImg, 0, 0, 450, 450);
             } else {
                 noTint();
@@ -169,15 +163,15 @@
                     image(titleImages[2], 0, 0);
                 fill('#FFFFFF');
                 textSize(10);
-                text('Version 2.0', 420, 10);
-                buttons[0].locate(5, 100); buttons[0].resize(150, 50); buttons[0].inTextSize = 20;
-                buttons[1].locate(295, 100); buttons[1].resize(150, 50); buttons[1].inTextSize = 20;
+                text('Version 2.0', 400, 70);
+                buttons[0].locate(23, 100); buttons[0].resize(150, 50); buttons[0].inTextSize = 20;
+                buttons[1].locate(275, 100); buttons[1].resize(150, 50); buttons[1].inTextSize = 20;
                 buttons[0].draw();
                 buttons[1].draw();
                 if (mode == "difficulty") {
-                    buttons[3].locate(295, 200); buttons[3].resize(150, 50); buttons[3].inTextSize = 20;
+                    buttons[3].locate(275, 200); buttons[3].resize(150, 50); buttons[3].inTextSize = 20;
                     buttons[3].text = 'Unbeatable'; buttons[3].draw();
-                    buttons[4].locate(5, 200); buttons[4].resize(150, 50); buttons[4].inTextSize = 20;
+                    buttons[4].locate(23, 200); buttons[4].resize(150, 50); buttons[4].inTextSize = 20;
                     buttons[4].text = 'Medium'; buttons[4].draw();
                 }
             }
@@ -189,10 +183,10 @@
             if (mode == 'play') {
                 buttons[2].text = 'Main Menu';
                 if (detectWin() == null)
-                    buttons[2].resize(100, 50); buttons[2].locate(175, 500)
+                    buttons[2].resize(100, 50); buttons[2].locate(175, 500);
                 buttons[2].draw();
                 if (detectWin() != null) {
-                    buttons[2].locate(((buttons[2].x - 20) / 2) + 20, 500)
+                    buttons[2].locate(((buttons[2].x - 20) / 2) + 20, 500);
                     if (detectWin() == X) {
                         tint(colorA.value());
                         image(xImg, 350, 500);
@@ -228,401 +222,404 @@
             }
         }
         function computerTurn() {
-            if (difficulty == "Easy" || (difficulty == "Medium" && Math.random() < 0.5)) {
-                let openBoard = [];
-                for (var i = 0; i < board.length; i++) {
-                    if (iSpace(i) == null)
-                        openBoard.push([(i % 3) * 100, Math.floor(i / 3) * 100]);
-                }
-                let placement = data.randInt(openBoard.length - 1);
-                let placeSpot = -1;
-                for (var i = 0; i < board.length; i++) {
-                    if (board[i][0] == openBoard[placement][0] && board[i][1] == openBoard[placement][1])
-                        placeSpot = i;
-                }
-                board[placeSpot][2] = turn;
-            } else if (difficulty == "Hard" || difficulty == "Medium") {
-                if (computerDefend()[0]) {
-                    place(computerDefend()[1], computerDefend()[2], turn);
-                    return;
-                }
-                if (space(0, 0) == null) {
-                    place(0, 0, turn);
-                    return;
-                }
-                if (space(200, 0) == null) {
-                    place(200, 0, turn);
-                    return;
-                }
-                if (space(200, 200) == null) {
-                    place(200, 200, turn);
-                    return;
-                }
-                if (space(0, 200) == null) {
-                    place(0, 200, turn);
-                    return;
-                }
-                if (space(100, 100) == null) {
-                    place(100, 100, turn);
-                    return;
-                }
-                let openBoard = [];
-                for (var i = 0; i < board.length; i++) {
-                    if (iSpace(i) == null)
-                        openBoard.push([(i % 3) * 100, Math.floor(i / 3) * 100]);
-                }
-                let placement = data.randInt(openBoard.length - 1);
-                let placeSpot = -1;
-                for (var i = 0; i < board.length; i++) {
-                    if (board[i][0] == openBoard[placement][0] && board[i][1] == openBoard[placement][1])
-                        placeSpot = i;
-                }
-                board[placeSpot][2] = turn;
-            } else if (difficulty == "Unbeatable") {
-                if (spacesTaken() <= 1) {
-                    if (turn == O && space(100, 100) == null) {
-                        place(100, 100, turn);
+            var _compTurn = setInterval(function () {
+                if (difficulty == "Easy" || (difficulty == "Medium" && Math.random() < 0.5)) {
+                    let openBoard = [];
+                    for (var i = 0; i < board.length; i++) {
+                        if (iSpace(i) == null)
+                            openBoard.push([(i % 3) * 100, Math.floor(i / 3) * 100]);
+                    }
+                    let placement = data.randInt(openBoard.length - 1);
+                    let placeSpot = -1;
+                    for (var i = 0; i < board.length; i++) {
+                        if (board[i][0] == openBoard[placement][0] && board[i][1] == openBoard[placement][1])
+                            placeSpot = i;
+                    }
+                    board[placeSpot][2] = turn;
+                } else if (difficulty == "Hard" || difficulty == "Medium") {
+                    if (computerDefend()[0]) {
+                        place(computerDefend()[1], computerDefend()[2], turn);
                         return;
-                    } else if (turn == O) {
+                    }
+                    if (space(0, 0) == null) {
                         place(0, 0, turn);
                         return;
-                    } else if (turn == X) {
+                    }
+                    if (space(200, 0) == null) {
+                        place(200, 0, turn);
+                        return;
+                    }
+                    if (space(200, 200) == null) {
                         place(200, 200, turn);
                         return;
                     }
-                }
-                if (computerDefend()[0]) {
-                    place(computerDefend()[1], computerDefend()[2], turn);
-                    return;
-                }
-                if (space(200, 0) == player && space(0, 200) == player && space(100, 0) == null) {
-                    place(100, 0, turn);
-                    return;
-                }
-                if (space(0, 0) == player && space(200, 200) == player && space(100, 200) == null) {
-                    place(100, 200, turn);
-                    return;
-                }
-                if (space(100, 0) == player) {
-                    if ((space(0, 100) == player || space(200, 100) == player) && space(100, 100) == null) {
+                    if (space(0, 200) == null) {
+                        place(0, 200, turn);
+                        return;
+                    }
+                    if (space(100, 100) == null) {
                         place(100, 100, turn);
                         return;
                     }
-                }
-                if (space(100, 200) == player) {
-                    if ((space(0, 100) == player || space(200, 100) == player) && space(100, 100) == null) {
-                        place(100, 100, turn);
+                    let openBoard = [];
+                    for (var i = 0; i < board.length; i++) {
+                        if (iSpace(i) == null)
+                            openBoard.push([(i % 3) * 100, Math.floor(i / 3) * 100]);
+                    }
+                    let placement = data.randInt(openBoard.length - 1);
+                    let placeSpot = -1;
+                    for (var i = 0; i < board.length; i++) {
+                        if (board[i][0] == openBoard[placement][0] && board[i][1] == openBoard[placement][1])
+                            placeSpot = i;
+                    }
+                    board[placeSpot][2] = turn;
+                } else if (difficulty == "Unbeatable") {
+                    if (spacesTaken() <= 1) {
+                        if (turn == O && space(100, 100) == null) {
+                            place(100, 100, turn);
+                            return;
+                        } else if (turn == O) {
+                            place(0, 0, turn);
+                            return;
+                        } else if (turn == X) {
+                            place(200, 200, turn);
+                            return;
+                        }
+                    }
+                    if (computerDefend()[0]) {
+                        place(computerDefend()[1], computerDefend()[2], turn);
                         return;
                     }
-                }
-                if (turn == X) {
-                    if (spacesTaken() == 2) {
-                        if (space(200, 0) == null) {
-                            place(200, 0, turn);
-                            return;
-                        } else {
-                            place(0, 0, turn);
+                    if (space(200, 0) == player && space(0, 200) == player && space(100, 0) == null) {
+                        place(100, 0, turn);
+                        return;
+                    }
+                    if (space(0, 0) == player && space(200, 200) == player && space(100, 200) == null) {
+                        place(100, 200, turn);
+                        return;
+                    }
+                    if (space(100, 0) == player) {
+                        if ((space(0, 100) == player || space(200, 100) == player) && space(100, 100) == null) {
+                            place(100, 100, turn);
                             return;
                         }
                     }
-                    if (spacesTaken() == 4) {
-                        if (space(0, 0) == null) {
-                            place(0, 0, turn);
-                            return;
-                        } else if (space(0, 200) == null) {
-                            place(0, 200, turn);
+                    if (space(100, 200) == player) {
+                        if ((space(0, 100) == player || space(200, 100) == player) && space(100, 100) == null) {
+                            place(100, 100, turn);
                             return;
                         }
                     }
-                }
-                if (space(100, 200) == player && space(0, 200) == null) {
-                    place(0, 200, turn);
+                    if (turn == X) {
+                        if (spacesTaken() == 2) {
+                            if (space(200, 0) == null) {
+                                place(200, 0, turn);
+                                return;
+                            } else {
+                                place(0, 0, turn);
+                                return;
+                            }
+                        }
+                        if (spacesTaken() == 4) {
+                            if (space(0, 0) == null) {
+                                place(0, 0, turn);
+                                return;
+                            } else if (space(0, 200) == null) {
+                                place(0, 200, turn);
+                                return;
+                            }
+                        }
+                    }
+                    if (space(100, 200) == player && space(0, 200) == null) {
+                        place(0, 200, turn);
+                        return;
+                    }
+                    if (space(0, 100) == player && space(0, 0) == null) {
+                        place(0, 0, turn);
+                        return;
+                    }
+                    if (space(100, 0) == player && space(200, 0) == null) {
+                        place(200, 0, turn);
+                        return;
+                    }
+                    if (space(200, 100) == player && space(200, 200) == null) {
+                        place(200, 200, turn);
+                        return;
+                    }
+                    let openBoard = [];
+                    for (var i = 0; i < board.length; i++) {
+                        if (iSpace(i) == null)
+                            openBoard.push([(i % 3) * 100, Math.floor(i / 3) * 100]);
+                    }
+                    let placement = data.randInt(openBoard.length - 1);
+                    let placeSpot = -1;
+                    for (var i = 0; i < board.length; i++) {
+                        if (board[i][0] == openBoard[placement][0] && board[i][1] == openBoard[placement][1])
+                            placeSpot = i;
+                    }
+                    board[placeSpot][2] = turn;
                     return;
                 }
-                if (space(0, 100) == player && space(0, 0) == null) {
-                    place(0, 0, turn);
-                    return;
-                }
-                if (space(100, 0) == player && space(200, 0) == null) {
-                    place(200, 0, turn);
-                    return;
-                }
-                if (space(200, 100) == player && space(200, 200) == null) {
-                    place(200, 200, turn);
-                    return;
-                }
-                let openBoard = [];
-                for (var i = 0; i < board.length; i++) {
-                    if (iSpace(i) == null)
-                        openBoard.push([(i % 3) * 100, Math.floor(i / 3) * 100]);
-                }
-                let placement = data.randInt(openBoard.length - 1);
-                let placeSpot = -1;
-                for (var i = 0; i < board.length; i++) {
-                    if (board[i][0] == openBoard[placement][0] && board[i][1] == openBoard[placement][1])
-                        placeSpot = i;
-                }
-                board[placeSpot][2] = turn;
-                return;
-            }
+                clearInterval(_compTurn);
+            }, 3000);
         }
         function spacesTaken() {
-            let j = 0;
-            for (var i = 0; i < board.length; i++) {
-                if (board[i][2] != null)
-                    j++;
+                let j = 0;
+                for (var i = 0; i < board.length; i++) {
+                    if (board[i][2] != null)
+                        j++;
+                }
+                return j;
             }
-            return j;
-        }
-        function place(x, y, what) {
-            for (var i = 0; i < board.length; i++) {
-                if (board[i][0] == x && board[i][1] == y) {
-                    board[i][2] = what;
-                    return;
-                }
-            }
-        }
-        function computerDefend() {
-            //Check for computer win.
-            //Check ↓→ slope
-            if (space(0, 0) == turn || space(100, 100) == turn || space(200, 200) == turn) {
-                if (space(100, 100) == null && space(0, 0) == turn && space(200, 200) == turn) {
-                    return [true, 100, 100];
-                }
-                if (space(100, 100) == turn && space(0, 0) == null && space(200, 200) == turn) {
-                    return [true, 0, 0];
-                }
-                if (space(100, 100) == turn && space(0, 0) == turn && space(200, 200) == null) {
-                    return [true, 200, 200];
+            function place(x, y, what) {
+                for (var i = 0; i < board.length; i++) {
+                    if (board[i][0] == x && board[i][1] == y) {
+                        board[i][2] = what;
+                        return;
+                    }
                 }
             }
-            //Check ↑→ slope
-            if (space(0, 200) == turn || space(100, 100) == turn || space(200, 0) == turn) {
-                if (space(100, 100) == null && space(200, 0) == turn && space(0, 200) == turn) {
-                    return [true, 100, 100];
+            function computerDefend() {
+                //Check for computer win.
+                //Check ↓→ slope
+                if (space(0, 0) == turn || space(100, 100) == turn || space(200, 200) == turn) {
+                    if (space(100, 100) == null && space(0, 0) == turn && space(200, 200) == turn) {
+                        return [true, 100, 100];
+                    }
+                    if (space(100, 100) == turn && space(0, 0) == null && space(200, 200) == turn) {
+                        return [true, 0, 0];
+                    }
+                    if (space(100, 100) == turn && space(0, 0) == turn && space(200, 200) == null) {
+                        return [true, 200, 200];
+                    }
                 }
-                if (space(100, 100) == turn && space(200, 0) == null && space(0, 200) == turn) {
-                    return [true, 200, 0];
+                //Check ↑→ slope
+                if (space(0, 200) == turn || space(100, 100) == turn || space(200, 0) == turn) {
+                    if (space(100, 100) == null && space(200, 0) == turn && space(0, 200) == turn) {
+                        return [true, 100, 100];
+                    }
+                    if (space(100, 100) == turn && space(200, 0) == null && space(0, 200) == turn) {
+                        return [true, 200, 0];
+                    }
+                    if (space(100, 100) == turn && space(200, 0) == turn && space(0, 200) == null) {
+                        return [true, 0, 200];
+                    }
                 }
-                if (space(100, 100) == turn && space(200, 0) == turn && space(0, 200) == null) {
-                    return [true, 0, 200];
+                for (var i = 0; i < 300; i += 100) {
+                    if (space(i, 0) == turn && space(i, 100) == turn && space(i, 200) == null)
+                        return [true, i, 200];
+                    if (space(i, 0) == null && space(i, 100) == turn && space(i, 200) == turn)
+                        return [true, i, 0];
+                    if (space(i, 0) == turn && space(i, 100) == null && space(i, 200) == turn)
+                        return [true, i, 100];
+                }
+                for (var i = 0; i < 300; i += 100) {
+                    if (space(0, i) == turn && space(100, i) == turn && space(200, i) == null)
+                        return [true, 200, i];
+                    if (space(0, i) == null && space(100, i) == turn && space(200, i) == turn)
+                        return [true, 0, i];
+                    if (space(0, i) == turn && space(100, i) == null && space(200, i) == turn)
+                        return [true, 100, i];
+                }
+                //Check for player win.
+                //Check ↓→ slope
+                if (space(0, 0) == player || space(100, 100) == player || space(200, 200) == player) {
+                    if (space(100, 100) == null && space(0, 0) == player && space(200, 200) == player) {
+                        return [true, 100, 100];
+                    }
+                    if (space(100, 100) == player && space(0, 0) == null && space(200, 200) == player) {
+                        return [true, 0, 0];
+                    }
+                    if (space(100, 100) == player && space(0, 0) == player && space(200, 200) == null) {
+                        return [true, 200, 200];
+                    }
+                }
+                //Check ↑→ slope
+                if (space(0, 200) == player || space(100, 100) == player || space(200, 0) == player) {
+                    if (space(100, 100) == null && space(200, 0) == player && space(0, 200) == player) {
+                        return [true, 100, 100];
+                    }
+                    if (space(100, 100) == player && space(200, 0) == null && space(0, 200) == player) {
+                        return [true, 200, 0];
+                    }
+                    if (space(100, 100) == player && space(200, 0) == player && space(0, 200) == null) {
+                        return [true, 0, 200];
+                    }
+                }
+                for (var i = 0; i < 300; i += 100) {
+                    if (space(i, 0) == player && space(i, 100) == player && space(i, 200) == null)
+                        return [true, i, 200];
+                    if (space(i, 0) == null && space(i, 100) == player && space(i, 200) == player)
+                        return [true, i, 0];
+                    if (space(i, 0) == player && space(i, 100) == null && space(i, 200) == player)
+                        return [true, i, 100];
+                }
+                for (var i = 0; i < 300; i += 100) {
+                    if (space(0, i) == player && space(100, i) == player && space(200, i) == null)
+                        return [true, 200, i];
+                    if (space(0, i) == null && space(100, i) == player && space(200, i) == player)
+                        return [true, 0, i];
+                    if (space(0, i) == player && space(100, i) == null && space(200, i) == player)
+                        return [true, 100, i];
+                }
+                return [false, null, null];
+            }
+            function unhexColor(c) {
+                let r_color = [];
+                let totalColor = 0;
+                for (var i = 1; i < 7; i += 2) {
+                    r_color.push(unhex(c[i] + c[i + 1]));
+                    totalColor += unhex(c[i] + c[i + 1]);
+                }
+                return [r_color, totalColor];
+            }
+            function hexColor(c1, c2, c3) {
+                return '#' + hex(c1, 2) + hex(c2, 2) + hex(c3, 2);
+            }
+            buttons[0].onHover = function () {
+                tint(colorA.value());
+                image(xImg, 10, 350);
+                noTint();
+                buttons[0].color = '#FFFFFF';
+                if (unhexColor(colorA.value())[1] > unhexColor('#BBBBBB')[1])
+                    buttons[0].color = '#AAAAAA';
+            }
+            buttons[0].onOutside = function () {
+                buttons[0].color = colorA.value();
+            }
+            buttons[1].onHover = function () {
+                tint(colorB.value());
+                image(oImg, 350, 350);
+                noTint();
+                buttons[1].color = '#FFFFFF';
+                if (unhexColor(colorB.value())[1] > unhexColor('#BBBBBB')[1])
+                    buttons[1].color = '#AAAAAA';
+            }
+            buttons[1].onOutside = function () {
+                buttons[1].color = colorB.value();
+            }
+            buttons[0].onRelease = function () {
+                if (format == null) {
+                    format = '1P';
+                    buttons[0].text = "X's";
+                    buttons[1].text = "O's";
+                } else if (mode == "setup") {
+                    player = X;
+                    turn = X;
+                    mode = 'difficulty';
+                    buttons[0].text = "Easy";
+                    buttons[1].text = "Hard";
+                } else {
+                    clearBoard();
+                    if (player == O)
+                        computerTurn();
+                    mode = 'play';
+                    difficulty = "Easy";
                 }
             }
-            for (var i = 0; i < 300; i += 100) {
-                if (space(i, 0) == turn && space(i, 100) == turn && space(i, 200) == null)
-                    return [true, i, 200];
-                if (space(i, 0) == null && space(i, 100) == turn && space(i, 200) == turn)
-                    return [true, i, 0];
-                if (space(i, 0) == turn && space(i, 100) == null && space(i, 200) == turn)
-                    return [true, i, 100];
-            }
-            for (var i = 0; i < 300; i += 100) {
-                if (space(0, i) == turn && space(100, i) == turn && space(200, i) == null)
-                    return [true, 200, i];
-                if (space(0, i) == null && space(100, i) == turn && space(200, i) == turn)
-                    return [true, 0, i];
-                if (space(0, i) == turn && space(100, i) == null && space(200, i) == turn)
-                    return [true, 100, i];
-            }
-            //Check for player win.
-            //Check ↓→ slope
-            if (space(0, 0) == player || space(100, 100) == player || space(200, 200) == player) {
-                if (space(100, 100) == null && space(0, 0) == player && space(200, 200) == player) {
-                    return [true, 100, 100];
-                }
-                if (space(100, 100) == player && space(0, 0) == null && space(200, 200) == player) {
-                    return [true, 0, 0];
-                }
-                if (space(100, 100) == player && space(0, 0) == player && space(200, 200) == null) {
-                    return [true, 200, 200];
+            buttons[1].onRelease = function () {
+                if (format == null) {
+                    turn = X;
+                    clearBoard();
+                    format = '2P';
+                    mode = 'play';
+                } else if (mode == "setup") {
+                    player = O;
+                    turn = X;
+                    mode = 'difficulty';
+                    buttons[0].text = "Easy";
+                    buttons[1].text = "Hard";
+                } else {
+                    clearBoard();
+                    if (player == O)
+                        computerTurn();
+                    mode = 'play';
+                    difficulty = "Hard";
                 }
             }
-            //Check ↑→ slope
-            if (space(0, 200) == player || space(100, 100) == player || space(200, 0) == player) {
-                if (space(100, 100) == null && space(200, 0) == player && space(0, 200) == player) {
-                    return [true, 100, 100];
-                }
-                if (space(100, 100) == player && space(200, 0) == null && space(0, 200) == player) {
-                    return [true, 200, 0];
-                }
-                if (space(100, 100) == player && space(200, 0) == player && space(0, 200) == null) {
-                    return [true, 0, 200];
-                }
+            buttons[2].onHover = function () {
+                buttons[2].color = '#FFFFFF';
             }
-            for (var i = 0; i < 300; i += 100) {
-                if (space(i, 0) == player && space(i, 100) == player && space(i, 200) == null)
-                    return [true, i, 200];
-                if (space(i, 0) == null && space(i, 100) == player && space(i, 200) == player)
-                    return [true, i, 0];
-                if (space(i, 0) == player && space(i, 100) == null && space(i, 200) == player)
-                    return [true, i, 100];
+            buttons[2].onOutside = function () {
+                buttons[2].color = '#888888';
             }
-            for (var i = 0; i < 300; i += 100) {
-                if (space(0, i) == player && space(100, i) == player && space(200, i) == null)
-                    return [true, 200, i];
-                if (space(0, i) == null && space(100, i) == player && space(200, i) == player)
-                    return [true, 0, i];
-                if (space(0, i) == player && space(100, i) == null && space(200, i) == player)
-                    return [true, 100, i];
-            }
-            return [false, null, null];
-        }
-        function unhexColor(c) {
-            let r_color = [];
-            let totalColor = 0;
-            for (var i = 1; i < 7; i += 2) {
-                r_color.push(unhex(c[i] + c[i + 1]));
-                totalColor += unhex(c[i] + c[i + 1]);
-            }
-            return [r_color, totalColor];
-        }
-        function hexColor(c1, c2, c3) {
-            return '#' + hex(c1, 2) + hex(c2, 2) + hex(c3, 2);
-        }
-        buttons[0].onHover = function () {
-            tint(colorA.value());
-            image(xImg, 10, 350);
-            noTint();
-            buttons[0].color = '#FFFFFF';
-            if (unhexColor(colorA.value())[1] > unhexColor('#BBBBBB')[1])
-                buttons[0].color = '#AAAAAA';
-        }
-        buttons[0].onOutside = function () {
-            buttons[0].color = colorA.value();
-        }
-        buttons[1].onHover = function () {
-            tint(colorB.value());
-            image(oImg, 350, 350);
-            noTint();
-            buttons[1].color = '#FFFFFF';
-            if (unhexColor(colorB.value())[1] > unhexColor('#BBBBBB')[1])
-                buttons[1].color = '#AAAAAA';
-        }
-        buttons[1].onOutside = function () {
-            buttons[1].color = colorB.value();
-        }
-        buttons[0].onRelease = function () {
-            if (format == null) {
-                format = '1P';
-                buttons[0].text = "X's";
-                buttons[1].text = "O's";
-            } else if (mode == "setup") {
-                player = X;
-                turn = X;
-                mode = 'difficulty';
-                buttons[0].text = "Easy";
-                buttons[1].text = "Hard";
-            } else {
+            buttons[2].onRelease = function () {
                 clearBoard();
+                format = null;
+                buttons[0].text = "1 Player";
+                buttons[1].text = "2 Player";
+                mode = "setup";
+            }
+            buttons[3].onOutside = function () {
+                buttons[3].color = '#888888';
+            }
+            buttons[3].onHover = function () {
+                buttons[3].color = '#FFFFFF';
+            }
+            buttons[3].onRelease = function () {
+                clearBoard();
+                difficulty = "Unbeatable";
                 if (player == O)
                     computerTurn();
+                turn = player;
                 mode = 'play';
-                difficulty = "Easy";
             }
-        }
-        buttons[1].onRelease = function () {
-            if (format == null) {
-                turn = X;
+            buttons[4].onOutside = function () {
+                buttons[4].color = '#555555';
+            }
+            buttons[4].onHover = function () {
+                buttons[4].color = '#FFFFFF';
+            }
+            buttons[4].onRelease = function () {
                 clearBoard();
-                format = '2P';
-                mode = 'play';
-            } else if (mode == "setup") {
-                player = O;
-                turn = X;
-                mode = 'difficulty';
-                buttons[0].text = "Easy";
-                buttons[1].text = "Hard";
-            } else {
-                clearBoard();
+                difficulty = "Medium";
                 if (player == O)
                     computerTurn();
+                turn = player;
                 mode = 'play';
-                difficulty = "Hard";
             }
-        }
-        buttons[2].onHover = function () {
-            buttons[2].color = '#FFFFFF';
-        }
-        buttons[2].onOutside = function () {
-            buttons[2].color = '#888888';
-        }
-        buttons[2].onRelease = function () {
-            clearBoard();
-            format = null;
-            buttons[0].text = "1 Player";
-            buttons[1].text = "2 Player";
-            mode = "setup";
-        }
-        buttons[3].onOutside = function () {
-            buttons[3].color = '#888888';
-        }
-        buttons[3].onHover = function () {
-            buttons[3].color = '#FFFFFF';
-        }
-        buttons[3].onRelease = function () {
-            clearBoard();
-            difficulty = "Unbeatable";
-            if (player == O)
-                computerTurn();
-            turn = player;
-            mode = 'play';
-        }
-        buttons[4].onOutside = function () {
-            buttons[4].color = '#555555';
-        }
-        buttons[4].onHover = function () {
-            buttons[4].color = '#FFFFFF';
-        }
-        buttons[4].onRelease = function () {
-            clearBoard();
-            difficulty = "Medium";
-            if (player == O)
-                computerTurn();
-            turn = player;
-            mode = 'play';
-        }
-        function space(x, y) {
-            for (var i = 0; i < board.length; i++) {
-                if (board[i][0] == x && board[i][1] == y) {
-                    return board[i][2];
+            function space(x, y) {
+                for (var i = 0; i < board.length; i++) {
+                    if (board[i][0] == x && board[i][1] == y) {
+                        return board[i][2];
+                    }
                 }
+                return false;
             }
-            return false;
-        }
-        function iSpace(i) {
-            return space((i % 3) * 100, Math.floor(i / 3) * 100);
-        }
-        function detectWin() {
-            if (space(0, 0) == X && space(200, 200) == X && space(100, 100) == X)
-                return X;
-            if (space(0, 0) == O && space(200, 200) == O && space(100, 100) == O)
-                return O;
-            if (space(0, 200) == X && space(100, 100) == X && space(200, 0) == X)
-                return X;
-            if (space(0, 200) == O && space(100, 100) == O && space(200, 0) == O)
-                return O;
-            for (var i = 0; i < 300; i += 100) {
-                if (space(i, 0) == X && space(i, 100) == X && space(i, 200) == X) {
+            function iSpace(i) {
+                return space((i % 3) * 100, Math.floor(i / 3) * 100);
+            }
+            function detectWin() {
+                if (space(0, 0) == X && space(200, 200) == X && space(100, 100) == X)
                     return X;
-                }
-                if (space(i, 0) == O && space(i, 100) == O && space(i, 200) == O) {
+                if (space(0, 0) == O && space(200, 200) == O && space(100, 100) == O)
                     return O;
-                }
-            }
-            for (var i = 0; i < 300; i += 100) {
-                if (space(0, i) == X && space(100, i) == X && space(200, i) == X) {
+                if (space(0, 200) == X && space(100, 100) == X && space(200, 0) == X)
                     return X;
-                }
-                if (space(0, i) == O && space(100, i) == O && space(200, i) == O) {
+                if (space(0, 200) == O && space(100, 100) == O && space(200, 0) == O)
                     return O;
+                for (var i = 0; i < 300; i += 100) {
+                    if (space(i, 0) == X && space(i, 100) == X && space(i, 200) == X) {
+                        return X;
+                    }
+                    if (space(i, 0) == O && space(i, 100) == O && space(i, 200) == O) {
+                        return O;
+                    }
                 }
+                for (var i = 0; i < 300; i += 100) {
+                    if (space(0, i) == X && space(100, i) == X && space(200, i) == X) {
+                        return X;
+                    }
+                    if (space(0, i) == O && space(100, i) == O && space(200, i) == O) {
+                        return O;
+                    }
+                }
+                for (var i = 0; i < board.length; i++) {
+                    if (board[i][2] == null)
+                        return null;
+                }
+                return 'tie';
             }
-            for (var i = 0; i < board.length; i++) {
-                if (board[i][2] == null)
-                    return null;
-            }
-            return 'tie';
-        }
     </script>
 </head>
 
