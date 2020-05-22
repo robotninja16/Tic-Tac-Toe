@@ -115,13 +115,21 @@
             canvas.position((windowWidth - width) / 2, 8);
         }
         const X = 'x'; const O = 'o';
-        buttons = [new button(), new button(), new button(), new button(), new button()];
+        buttons = [new button(), new button(), new button(), new button(), new button(), new button()];
         mode = 'setup';
         format = null;
         player = null;
         buttons[0].text = '1 Player';
         buttons[1].text = '2 Player';
+        //let compTurnOver = false;
+        var _compTurn;
         function draw() {
+            /*
+            if (compTurnOver) {
+                clearInterval(_compTurn);
+                compTurnOver = false;
+            }
+            */
             colorMode(RGB);
             colorA.position((windowWidth - 174) / 2 + 98, 700);
             colorB.position((104 + windowWidth) / 2 + 98, 700);
@@ -200,7 +208,7 @@
             }
         }
         function mouseClicked() {
-            if (mode == 'play' && detectWin() == null) {
+            if (mode == 'play' && detectWin() == null && (turn == player || format == '2P')) {
                 if (space(Math.floor(mouseX / 150) * 100, Math.floor(mouseY / 150) * 100) == null) {
                     for (var i = 0; i < board.length; i++) {
                         if (board[i][0] == Math.floor(mouseX / 150) * 100 && board[i][1] == Math.floor(mouseY / 150) * 100) {
@@ -212,18 +220,17 @@
                             } else if (turn == O) {
                                 turn = X;
                             }
-                            if (format == "1P" && detectWin() == null) {
+                            if (format == "1P" && detectWin() == null) 
                                 computerTurn();
-                                turn = player;
-                            }
                             return;
                         }
                     }
                 }
             }
         }
+        var strategy;
         function computerTurn() {
-            var _compTurn = setInterval(function () {
+            setTimeout(function () {
                 if (difficulty == "Easy" || (difficulty == "Medium" && Math.random() < 0.5)) {
                     let openBoard = [];
                     for (var i = 0; i < board.length; i++) {
@@ -283,12 +290,25 @@
                             place(0, 0, turn);
                             return;
                         } else if (turn == X) {
+                            strategy = Math.ceil(Math.random() - 0.3);
                             place(200, 200, turn);
                             return;
                         }
                     }
                     if (computerDefend()[0]) {
                         place(computerDefend()[1], computerDefend()[2], turn);
+                        return;
+                    }
+                    if (turn == X && space(0, 100) == null && strategy == 0 && space(0, 200) == null) {
+                        place(0, 100, turn);
+                        return;
+                    }
+                    if (turn == X && space(0, 200) == null && strategy == 0) {
+                        place(0, 200, turn);
+                        return;
+                    }
+                    if (turn == X && space(0, 0) == null && (strategy == 1 || space(0, 200) == null)) {
+                        place(0, 0, turn);
                         return;
                     }
                     if (space(200, 0) == player && space(0, 200) == player && space(100, 0) == null) {
@@ -361,8 +381,8 @@
                     board[placeSpot][2] = turn;
                     return;
                 }
-                clearInterval(_compTurn);
-            }, 3000);
+            }, 300);
+            setTimeout(function () {turn = player;}, 300);
         }
         function spacesTaken() {
             let j = 0;
@@ -562,7 +582,6 @@
             difficulty = "Unbeatable";
             if (player == O)
                 computerTurn();
-            turn = player;
             mode = 'play';
         }
         buttons[4].onOutside = function () {
@@ -576,7 +595,6 @@
             difficulty = "Medium";
             if (player == O)
                 computerTurn();
-            turn = player;
             mode = 'play';
         }
         function space(x, y) {
@@ -624,11 +642,11 @@
     </script>
 </head>
 
-<body id='body'\>
-<style>
-    #body {
-        background-color: black;
-    }
-</style>
+<body id='body' \>
+    <style>
+        #body {
+            background-color: black;
+        }
+    </style>
 
 </html>
