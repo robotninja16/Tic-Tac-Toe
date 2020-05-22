@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <!--Tic-Tac-Toe version 2.1, last updated 9/14/2019, 12:40 PM-->
-<html>
-
-<div id='__rect'></div>
+<html id="html">
 <style type='text/css'>
-    #__rect {
+    #head {
         width: 100%;
         height: 100%;
         stroke: none;
         background-color: black;
-        cursor: cell;
     }
 </style>
 
@@ -20,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.sound.js"></script>
     <script src="src/p5.clickable.js"></script>
     <script src="src/Data.js"></script>
-    <button id="Music_Button">Music</button>
+    <button id="Music_Button"><img src="src/assets/Music.png" style="width:150px;height:75px;left:0px;top:0px;"></button>
     <style type='text/css'>
         #Music_Button {
             font-family: serif;
@@ -35,7 +32,7 @@
             cursor: pointer;
         }
     </style>
-    <button id="Color_Button">Colors</button>
+    <button id="Color_Button"><img src="src/assets/Colors.png" style="width:150px;height:75px;left:0px;top:0px;"></button>
     <style type='text/css'>
         #Color_Button {
             font-family: serif;
@@ -90,13 +87,14 @@
                 + "\nCredit: P5, Martin del Rio for the looks and the in-canvas buttons. See \nhttps://p5js.org for the p5 stuff."
                 + "\nThank you, and have a good time playing Tic-Tac-Toe! :)"
                 + "\nOh, and I got the music from Scratch (https://scratch.mit.edu)");
-            colorA = createColorPicker('#FF0000'); colorA.position(220, 700);
-            colorB = createColorPicker('#0000FF'); colorB.position(360, 700);
+            colorA = createColorPicker('#FF0000'); colorA.position(220, 700); colorA.addClass("element");
+            colorB = createColorPicker('#0000FF'); colorB.position(360, 700); colorB.addClass("element");
             textA = createDiv("X");
             textB = createDiv("O");
             textA.style('color', colorA.value()); textA.position(232, 650); textA.style('font-size', '30px'); textA.style('font-family', 'Arial');
             textB.style('color', colorB.value()); textB.position(371, 650); textB.style('font-size', '30px'); textB.style('font-family', 'Arial');
             FX = createCheckbox('Special FX', true);
+            FX.addClass("element");
             canvas = createCanvas(450, 600);
             canvas.position((windowWidth - width) / 2, 8);
             Music_Button.addEventListener('click', function () {
@@ -220,7 +218,7 @@
                             } else if (turn == O) {
                                 turn = X;
                             }
-                            if (format == "1P" && detectWin() == null) 
+                            if (format == "1P" && detectWin() == null)
                                 computerTurn();
                             return;
                         }
@@ -382,7 +380,7 @@
                     return;
                 }
             }, 300);
-            setTimeout(function () {turn = player;}, 300);
+            setTimeout(function () { turn = player; }, 300);
         }
         function spacesTaken() {
             let j = 0;
@@ -642,11 +640,35 @@
     </script>
 </head>
 
-<body id='body' \>
-    <style>
-        #body {
-            background-color: black;
-        }
-    </style>
+<body id='body'></body>
+<style>
+    label:last-child {
+        cursor: pointer;
+    }
+
+    #body {
+        background-color: black;
+    }
+
+    input {
+        cursor: pointer;
+    }
+
+    input:first-child {
+        cursor: pointer;
+    }
+
+    div.element {
+        cursor: pointer;
+    }
+
+    :first-child {
+        cursor: cell;
+    }
+
+    :last-child {
+        cursor: cell;
+    }
+</style>
 
 </html>
