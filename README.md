@@ -3,14 +3,8 @@
 Uploaded in version 2, but who cares. :P 
 Not me.
 Includes music (might not work, its a .wav file), & it has nice little html buttons!
-```
-```
 Includes `Data.js`, a little thing I made... 
-```
-```
 If you want it, just get it.
-```
-```
 `function`s:
 ```
 Data.contained3D(lst1: any[], lst2: any[], lst3: any[], item1: any item, item2: any item, item3: any item)
